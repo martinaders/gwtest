@@ -4,7 +4,7 @@
   <property name="gwt.args" value="" />
 
   <!-- Configure path to GWT SDK -->
-  <property name="gwt.sdk" location="../.." />
+  <property name="gwt.sdk" location="/home/mm/bin/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.5.1/gwt-2.5.1" /><!--TODO-->
 
   <path id="project.class.path">
     <pathelement location="war/WEB-INF/classes"/>
@@ -26,7 +26,8 @@
     <javac srcdir="src" includes="**" encoding="utf-8"
         destdir="war/WEB-INF/classes"
         source="1.5" target="1.5" nowarn="true"
-        debug="true" debuglevel="lines,vars,source">
+        debug="true" debuglevel="lines,vars,source"
+        includeantruntime="false">
       <classpath refid="project.class.path"/>
     </javac>
     <copy todir="war/WEB-INF/classes">
@@ -39,8 +40,8 @@
       <classpath>
         <pathelement location="src"/>
         <path refid="project.class.path"/>
-        <pathelement location="../../validation-api-1.0.0.GA.jar" />
-        <pathelement location="../../validation-api-1.0.0.GA-sources.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
       </classpath>
       <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
       <jvmarg value="-Xmx256M"/>
@@ -48,7 +49,7 @@
       <arg value="war"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
       <arg line="${gwt.args}"/>
-      <arg value="com.google.gwt.sample.hello.Hello"/>
+      <arg value="ch.gwtest.Gwtest"/>
     </java>
   </target>
 
