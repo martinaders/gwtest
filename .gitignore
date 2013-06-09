@@ -1,2 +1,8 @@
 *.class
 .settings
+war/WEB-INF/lib
+war/WEB-INF/deploy
+gwt-unitCache
+war/gwtest
+.ivy.jar
+rechner.war

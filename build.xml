@@ -2,6 +2,7 @@
 <project name="Hello" default="build" basedir="."  xmlns:ivy="antlib:org.apache.ivy.ant">
   <!-- Arguments to gwtc and devmode targets -->
   <property name="gwt.args" value="" />
+  <property name="glassfish" value="/home/mm/bin/glassfish" />
 
   <target name="dependencies">
     <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/2.3.0/ivy-2.3.0.jar" dest=".ivy.jar" skipexisting="true"/>
@@ -10,6 +11,7 @@
     <ivy:cachepath organisation="com.google.gwt" module="gwt-dev" revision="2.5.1" pathid="lib.gwt-dev" inline="true" log="quiet"/>
     <ivy:cachepath organisation="com.google.gwt" module="gwt-codeserver" revision="2.5.1" pathid="lib.gwt-codeserver" inline="true" log="quiet"/>
     <ivy:cachepath organisation="javax.validation" module="validation-api" revision="1.1.0.Final" pathid="lib.validation" inline="true" log="quiet"/>
+    <ivy:cachepath organisation="org.glassfish.embedded" module="maven-embedded-glassfish-plugin" revision="3.1.2.2" pathid="lib.glassfish" inline="true" log="quiet"/>
   </target>
 
   <path id="project.class.path">
@@ -92,13 +94,27 @@
   <target name="build" depends="gwtc" description="Build this project" />
 
   <target name="war" depends="build" description="Create a war file">
-    <zip destfile="Hello.war" basedir="war"/>
+    <zip destfile="rechner.war" basedir="war"/>
+  </target>
+
+  <target name="deploy" description="Deploy the application">
+    <exec failonerror="true" executable="${glassfish}/bin/asadmin">
+      <arg value="restart-domain" />
+      <arg value="domain1" />
+    </exec>
+    <exec failonerror="true" executable="${glassfish}/bin/asadmin">
+       <arg value="deploy" />
+       <arg value="${basedir}/rechner.war" />
+    </exec>
   </target>
 
   <target name="clean" description="Cleans this project">
     <delete dir="war/WEB-INF/classes" failonerror="false" />
     <delete dir="gwt-unitCache" failonerror="false" />
     <delete dir="war/WEB-INF/lib" failonerror="false" />
+    <delete dir="war/WEB-INF/deploy" failonerror="false" />
+    <delete dir="war/gwtest" failonerror="false" />
+    <delete dir="rechner.war" failonerror="false" />
   </target>
 
 </project>
