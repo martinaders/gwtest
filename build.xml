@@ -31,22 +31,23 @@
     <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpath=".ivy.jar"/>
     <ivy:cachepath organisation="com.google.gwt" module="gwt-user" revision="2.5.1" pathid="lib.gwt-user" inline="true" log="quiet"/>
     <ivy:cachepath organisation="com.google.gwt" module="gwt-dev" revision="2.5.1" pathid="lib.gwt-dev" inline="true" log="quiet"/>
+    <ivy:cachepath organisation="com.google.gwt" module="gwt-codeserver" revision="2.5.1" pathid="lib.gwt-codeserver" inline="true" log="quiet"/>
     <ivy:cachepath organisation="javax.validation" module="validation-api" revision="1.1.0.Final" pathid="lib.validation" inline="true" log="quiet"/>
   </target>
 
   <path id="project.class.path">
     <pathelement location="war/WEB-INF/classes"/>
     <path refid="lib.gwt-user"/>
-    <fileset dir="${gwt.sdk}" includes="gwt-dev*.jar"/>
+    <path refid="lib.gwt-dev"/>
     <!-- Add any additional non-server libs (such as JUnit) -->
     <fileset dir="war/WEB-INF/lib" includes="**/*.jar"/>
   </path>
 
   <target name="libs" depends="dependencies" description="Copy libs to WEB-INF/lib">
     <mkdir dir="war/WEB-INF/lib" />
-    <copy todir="war/WEB-INF/lib" file="${gwt.sdk}/gwt-servlet.jar" />
-    <copy todir="war/WEB-INF/lib" file="${gwt.sdk}/gwt-servlet-deps.jar" />
-    <!-- Add any additional server libs that need to be copied -->
+    <copy todir="war/WEB-INF/lib">
+      <path refid="lib.gwt-codeserver"/>
+    </copy>
   </target>
 
   <target name="javac" depends="libs" description="Compile java source to bytecode">
@@ -122,6 +123,7 @@
   <target name="clean" description="Cleans this project">
     <delete dir="war/WEB-INF/classes" failonerror="false" />
     <delete dir="gwt-unitCache" failonerror="false" />
+    <delete dir="war/WEB-INF/lib" failonerror="false" />
   </target>
 
 </project>
