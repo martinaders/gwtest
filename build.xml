@@ -3,29 +3,6 @@
   <!-- Arguments to gwtc and devmode targets -->
   <property name="gwt.args" value="" />
 
-  <!-- Configure path to GWT SDK -->
-  <!--  Required files for GWT SDK v2.5.1:
-	validation-api-1.0.0.GA.jar
-	gwt-user.jar
-	requestfactory-client.jar
-	gwt-elemental.jar
-	gwt-servlet.jar
-	gwt-api-checker.jar
-	gwt-codeserver.jar
-	requestfactory-server.jar
-	gwt-dev.jar
-	validation-api-1.0.0.GA-sources.jar
-	requestfactory-apt.jar
-	requestfactory-server+src.jar
-	gwt-soyc-vis.jar
-	requestfactory-client-src.jar
-	gwt-servlet-deps.jar
-	requestfactory-server-src.jar
-	requestfactory-apt-src.jar
-	requestfactory-client+src.jar
-  -->
-  <property name="gwt.sdk" location="/home/mm/bin/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.5.1/gwt-2.5.1" /><!--TODO-->
-
   <target name="dependencies">
     <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/2.3.0/ivy-2.3.0.jar" dest=".ivy.jar" skipexisting="true"/>
     <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpath=".ivy.jar"/>
@@ -69,8 +46,7 @@
       <classpath>
         <pathelement location="src"/>
         <path refid="project.class.path"/>
-        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
-        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
+        <path refid="lib.validation" />
       </classpath>
       <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
       <jvmarg value="-Xmx256M"/>
@@ -87,8 +63,7 @@
       <classpath>
         <pathelement location="src"/>
         <path refid="project.class.path"/>
-        <pathelement location="../../validation-api-1.0.0.GA.jar" />
-        <pathelement location="../../validation-api-1.0.0.GA-sources.jar" />
+        <path refid="lib.validation" />
       </classpath>
       <jvmarg value="-Xmx256M"/>
       <arg value="-startupUrl"/>
@@ -97,7 +72,7 @@
       <arg value="war"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
       <arg line="${gwt.args}"/>
-      <arg value="com.google.gwt.sample.hello.Hello"/>
+      <arg value="ch.gwtest.Gwtest"/>
     </java>
   </target>
 
