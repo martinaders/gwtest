@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<project name="Hello" default="build" basedir=".">
+<project name="Hello" default="build" basedir="."  xmlns:ivy="antlib:org.apache.ivy.ant">
   <!-- Arguments to gwtc and devmode targets -->
   <property name="gwt.args" value="" />
 
@@ -26,15 +26,23 @@
   -->
   <property name="gwt.sdk" location="/home/mm/bin/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.5.1/gwt-2.5.1" /><!--TODO-->
 
+  <target name="dependencies">
+    <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/2.3.0/ivy-2.3.0.jar" dest=".ivy.jar" skipexisting="true"/>
+    <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpath=".ivy.jar"/>
+    <ivy:cachepath organisation="com.google.gwt" module="gwt-user" revision="2.5.1" pathid="lib.gwt-user" inline="true" log="quiet"/>
+    <ivy:cachepath organisation="com.google.gwt" module="gwt-dev" revision="2.5.1" pathid="lib.gwt-dev" inline="true" log="quiet"/>
+    <ivy:cachepath organisation="javax.validation" module="validation-api" revision="1.1.0.Final" pathid="lib.validation" inline="true" log="quiet"/>
+  </target>
+
   <path id="project.class.path">
     <pathelement location="war/WEB-INF/classes"/>
-    <pathelement location="${gwt.sdk}/gwt-user.jar"/>
+    <path refid="lib.gwt-user"/>
     <fileset dir="${gwt.sdk}" includes="gwt-dev*.jar"/>
     <!-- Add any additional non-server libs (such as JUnit) -->
     <fileset dir="war/WEB-INF/lib" includes="**/*.jar"/>
   </path>
 
-  <target name="libs" description="Copy libs to WEB-INF/lib">
+  <target name="libs" depends="dependencies" description="Copy libs to WEB-INF/lib">
     <mkdir dir="war/WEB-INF/lib" />
     <copy todir="war/WEB-INF/lib" file="${gwt.sdk}/gwt-servlet.jar" />
     <copy todir="war/WEB-INF/lib" file="${gwt.sdk}/gwt-servlet-deps.jar" />
@@ -113,7 +121,7 @@
 
   <target name="clean" description="Cleans this project">
     <delete dir="war/WEB-INF/classes" failonerror="false" />
-    <delete dir="war/hello" failonerror="false" />
+    <delete dir="gwt-unitCache" failonerror="false" />
   </target>
 
 </project>
