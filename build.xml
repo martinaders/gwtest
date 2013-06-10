@@ -100,16 +100,26 @@
     <zip destfile="rechner.war" basedir="war"/>
   </target>
 
-  <target name="deploy" description="Deploy the application">
+  <target name="container-start" unless="container.running">
     <exec failonerror="true" executable="${glassfish}/bin/asadmin">
       <arg value="restart-domain" />
       <arg value="domain1" />
     </exec>
+  </target>
+
+  <target name="deploy" description="Deploy the application">
+    <condition property="container.running">
+      <http url="http://localhost:8080/"/>
+    </condition>
+    <antcall target="container-start"/>
     <exec failonerror="true" executable="${glassfish}/bin/asadmin">
        <arg value="deploy" />
        <arg value="--force=true" />
        <arg value="${basedir}/rechner.war" />
     </exec>
+    <waitfor maxwait="10" maxwaitunit="second" checkevery="500">
+      <http url="http://localhost:8080/rechner"/>
+    </waitfor>
   </target>
 
   <target name="clean" description="Cleans this project">
