@@ -100,7 +100,7 @@
   <target name="build" depends="gwtc" description="Build this project" />
 
   <target name="war" depends="build" description="Create a war file">
-    <zip destfile="rechner.war" basedir="war"/>
+    <zip destfile="rechner.war" basedir="war" update="true"/>
   </target>
 
   <target name="container-start" unless="container.running">
