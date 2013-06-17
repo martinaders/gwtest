@@ -10,6 +10,7 @@
     <ivy:cachepath organisation="com.google.gwt" module="gwt-user" revision="2.5.1" pathid="lib.gwt-user" inline="true" log="quiet"/>
     <ivy:cachepath organisation="com.google.gwt" module="gwt-dev" revision="2.5.1" pathid="lib.gwt-dev" inline="true" log="quiet"/>
     <ivy:cachepath organisation="com.google.gwt" module="gwt-codeserver" revision="2.5.1" pathid="lib.gwt-codeserver" inline="true" log="quiet"/>
+    <ivy:cachepath organisation="com.google.gwt" module="gwt-servlet" revision="2.5.1" pathid="lib.gwt-servlet" inline="true" log="quiet"/>
     <ivy:cachepath organisation="javax.validation" module="validation-api" revision="1.1.0.Final" pathid="lib.validation" inline="true" log="quiet"/>
     <ivy:cachepath organisation="org.glassfish.embedded" module="maven-embedded-glassfish-plugin" revision="3.1.2.2" pathid="lib.glassfish" inline="true" log="quiet"/>
     <!-- Avoid build errors due to missing java.lang.reflect.Method -->
@@ -31,6 +32,7 @@
     <mkdir dir="war/WEB-INF/classes" />
     <copy todir="war/WEB-INF/lib" flatten="true">
       <path refid="project.class.path"/>
+      <path refid="lib.gwt-servlet"/>
     </copy>
   </target>
 
@@ -68,6 +70,14 @@
   <target name="build" depends="gwtc" description="Build this project" />
 
   <target name="war" depends="build" description="Create a war file">
+    <delete><!-- would be nicer with dependency exclusion -->
+      <fileset dir="war/WEB-INF/lib" includes="gwt-dev*"/>
+      <fileset dir="war/WEB-INF/lib" includes="gwt-user*"/>
+      <fileset dir="war/WEB-INF/lib" includes="gwt-codeserver*"/>
+      <fileset dir="war/WEB-INF/lib" includes="*-sources.jar"/>
+      <fileset dir="war/WEB-INF/lib" includes="*-javadoc.jar"/>
+    </delete>
+    <delete file="rechner.war"/>
     <zip destfile="rechner.war" basedir="war" update="true"/>
   </target>
 
